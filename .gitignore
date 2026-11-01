@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Production build output
+dist/
+dist-ssr/
+*.local
+tsconfig.tsbuildinfo
+
+# Environment & Credentials
+.env
+.env.local
+.env.*.local
+*.env
+*.pem
+*.key
+
+# Logs & Diagnostics
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# Chat Data & Exports (Security & Privacy Safeguard)
+*.txt
+*.zip
+*.csv
+*.sqlite
+*.db
+*.jsonl
+
+# Editor & System Files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
