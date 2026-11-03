@@ -7,23 +7,56 @@ import {
   MessageSquare,
   Globe,
   Upload,
-  Calendar
+  Calendar,
+  Download,
+  Printer,
+  ArrowRight
 } from 'lucide-react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { getAllResources } from '@/core/storage/resource-repository';
 import { getAllChats } from '@/core/storage/chat-repository';
+import {
+  exportResourcesToMarkdown,
+  generatePdfBlob,
+  triggerFileDownload
+} from '@/core/export/export-service';
 
 interface ResourcesViewProps {
   onOpenImport: () => void;
+  onNavigateToMessage?: (chatId: string, messageId?: string) => void;
 }
 
-export const ResourcesPlaceholderView: React.FC<ResourcesViewProps> = ({ onOpenImport }) => {
+export const ResourcesPlaceholderView: React.FC<ResourcesViewProps> = ({
+  onOpenImport,
+  onNavigateToMessage,
+}) => {
   const resources = useLiveQuery(() => getAllResources(), []);
   const chats = useLiveQuery(() => getAllChats(), []);
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDomain, setSelectedDomain] = useState<string>('all');
   const [selectedChatId, setSelectedChatId] = useState<string>('all');
+
+  // Export handlers
+  const handleExportMarkdown = () => {
+    if (filteredResources.length === 0) return;
+    const md = exportResourcesToMarkdown(filteredResources);
+    triggerFileDownload(md, `octonote-resources-${Date.now()}.md`, 'text/markdown');
+  };
+
+  const handleExportPdf = () => {
+    if (filteredResources.length === 0) return;
+    const sections = [
+      {
+        heading: `Extracted Resources (${filteredResources.length})`,
+        lines: filteredResources.map(
+          (r) => `- [${r.displayLabel}] ${r.rawUrl} (${r.domain}) [${r.sender || 'Unknown'}, Line ${r.sourceLineStart}]`
+        ),
+      },
+    ];
+    const blob = generatePdfBlob('Octonote: Extracted Resources', sections);
+    triggerFileDownload(blob, `octonote-resources-${Date.now()}.pdf`, 'application/pdf');
+  };
 
   // Build a fast lookup for chat names by chatId
   const chatNameMap = useMemo(() => {
@@ -175,14 +208,32 @@ export const ResourcesPlaceholderView: React.FC<ResourcesViewProps> = ({ onOpenI
           </p>
         </div>
 
-        <button
-          type="button"
-          onClick={onOpenImport}
-          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-lg transition-colors self-start sm:self-auto"
-        >
-          <Upload className="h-3.5 w-3.5" />
-          <span>Import More Chats</span>
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={handleExportPdf}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg shadow-2xs transition-colors"
+          >
+            <Printer className="h-3.5 w-3.5 text-indigo-600" />
+            <span>PDF Export</span>
+          </button>
+          <button
+            type="button"
+            onClick={handleExportMarkdown}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg shadow-2xs transition-colors"
+          >
+            <Download className="h-3.5 w-3.5 text-indigo-600" />
+            <span>Markdown</span>
+          </button>
+          <button
+            type="button"
+            onClick={onOpenImport}
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-lg transition-colors"
+          >
+            <Upload className="h-3.5 w-3.5" />
+            <span>Import More Chats</span>
+          </button>
+        </div>
       </div>
 
       {/* Filter and Search Bar */}
@@ -334,6 +385,19 @@ export const ResourcesPlaceholderView: React.FC<ResourcesViewProps> = ({ onOpenI
                     </span>
                     <span>&middot;</span>
                     <span>Line {res.sourceLineStart}</span>
+                    {onNavigateToMessage && (
+                      <>
+                        <span>&middot;</span>
+                        <button
+                          type="button"
+                          onClick={() => onNavigateToMessage(res.chatId, res.messageId)}
+                          className="inline-flex items-center gap-1 font-semibold text-indigo-600 hover:underline"
+                        >
+                          <span>Open in Chat</span>
+                          <ArrowRight className="h-3 w-3" />
+                        </button>
+                      </>
+                    )}
                   </div>
 
                   <div className="flex items-center gap-1 text-slate-400">

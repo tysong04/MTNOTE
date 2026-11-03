@@ -25,6 +25,7 @@ describe('Octonote Application Shell & Import Workflow', () => {
     expect(screen.getByRole('button', { name: 'View Search' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'View Insights' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'View Settings' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'View Profile' })).toBeInTheDocument();
   });
 
   it('navigates between views when navigation buttons are clicked', () => {
@@ -48,12 +49,17 @@ describe('Octonote Application Shell & Import Workflow', () => {
     // Switch to Insights
     fireEvent.click(screen.getByRole('button', { name: 'View Insights' }));
     expect(screen.getByText('Conversation Intelligence')).toBeInTheDocument();
-    expect(screen.getByText('Awaiting conversation data')).toBeInTheDocument();
+    expect(screen.getByText('No conversation data available')).toBeInTheDocument();
 
     // Switch to Settings
     fireEvent.click(screen.getByRole('button', { name: 'View Settings' }));
     expect(screen.getByText('Settings & Data Control')).toBeInTheDocument();
     expect(screen.getByText('Privacy & Data Control')).toBeInTheDocument();
+
+    // Switch to Profile
+    fireEvent.click(screen.getByRole('button', { name: 'View Profile' }));
+    expect(screen.getByText('Profile & Preferences')).toBeInTheDocument();
+    expect(screen.getByText('Personal Information')).toBeInTheDocument();
   });
 
   it('opens and closes the functional import dialog', () => {
@@ -269,5 +275,126 @@ describe('Octonote Application Shell & Import Workflow', () => {
     render(<App />);
     expect(screen.getByText('100% on device')).toBeInTheDocument();
     expect(screen.getByText(/local-first & zero-knowledge by architecture/i)).toBeInTheDocument();
+  });
+
+  it('searches messages and links in the Search view with full-text indexing', async () => {
+    render(<App />);
+
+    // 1. Import a chat with decisions and links
+    const chatContent =
+      '15/01/2024, 10:00 - Alice: We agreed to launch the beta and check https://github.com/octonote/app\n' +
+      '15/01/2024, 10:05 - Bob: I will test the release candidate by Friday.\n';
+    const file = new File([chatContent], 'search-test.txt', { type: 'text/plain' });
+
+    fireEvent.click(screen.getAllByRole('button', { name: /import chat/i })[0]);
+    fireEvent.change(screen.getByTestId('file-upload-input'), { target: { files: [file] } });
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: /Save to Workspace/i })).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /Save to Workspace/i }));
+    await waitFor(() => {
+      expect(screen.getByText(/Saved to Local Workspace!/i)).toBeInTheDocument();
+    });
+    fireEvent.click(screen.getByRole('button', { name: /Done/i }));
+
+    // 2. Navigate to Search tab
+    fireEvent.click(screen.getByRole('button', { name: 'View Search' }));
+
+    await waitFor(() => {
+      expect(screen.getByText('Full-Text Search')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByPlaceholderText(/Search conversations/i);
+    fireEvent.change(searchInput, { target: { value: 'candidate' } });
+
+    await waitFor(() => {
+      expect(screen.getAllByText(/candidate/i).length).toBeGreaterThan(0);
+      expect(screen.getByText('Bob')).toBeInTheDocument();
+      expect(screen.getByText('Open in Conversation')).toBeInTheDocument();
+    });
+  });
+
+  it('generates extractive summaries and answers grounded questions in Insights view', async () => {
+    render(<App />);
+
+    // 1. Import chat
+    const chatContent =
+      '15/01/2024, 10:00 - Alice: We decided to deploy the service on Sunday.\n' +
+      '15/01/2024, 10:05 - Bob: I will prepare the deployment checklist by Friday.\n';
+    const file = new File([chatContent], 'insights-test.txt', { type: 'text/plain' });
+
+    fireEvent.click(screen.getAllByRole('button', { name: /import chat/i })[0]);
+    fireEvent.change(screen.getByTestId('file-upload-input'), { target: { files: [file] } });
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: /Save to Workspace/i })).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /Save to Workspace/i }));
+    await waitFor(() => {
+      expect(screen.getByText(/Saved to Local Workspace!/i)).toBeInTheDocument();
+    });
+    fireEvent.click(screen.getByRole('button', { name: /Done/i }));
+
+    // 2. Navigate to Insights tab
+    fireEvent.click(screen.getByRole('button', { name: 'View Insights' }));
+
+    await waitFor(() => {
+      expect(screen.getByText('Conversation Insights')).toBeInTheDocument();
+      expect(screen.getByText(/We decided to deploy the service on Sunday/i)).toBeInTheDocument();
+      expect(screen.getByText(/I will prepare the deployment checklist/i)).toBeInTheDocument();
+    });
+
+    // 3. Test Q&A
+    fireEvent.click(screen.getByRole('button', { name: /Grounded Q&A/i }));
+    const qaInput = screen.getByPlaceholderText(/When is the deadline/i);
+    fireEvent.change(qaInput, { target: { value: 'When is the service deployment?' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Ask' }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/Grounded Answer Found/i)).toBeInTheDocument();
+      expect(screen.getByText(/Verifiable Source Messages/i)).toBeInTheDocument();
+    });
+  });
+
+  it('navigates to Profile view and saves profile preference changes', async () => {
+    render(<App />);
+
+    // Navigate to Profile
+    fireEvent.click(screen.getByRole('button', { name: 'View Profile' }));
+    expect(screen.getByText('Profile & Preferences')).toBeInTheDocument();
+
+    const nameInput = screen.getByDisplayValue('Alex Morgan');
+    fireEvent.change(nameInput, { target: { value: 'Alexandria Morgan' } });
+
+    fireEvent.click(screen.getByRole('button', { name: /Save Profile Preferences/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/Changes Saved Locally!/i)).toBeInTheDocument();
+    });
+  });
+
+  it('allows locking session and unlocking via guest access', async () => {
+    render(<App />);
+
+    // Go to Profile and click Lock Session
+    fireEvent.click(screen.getByRole('button', { name: 'View Profile' }));
+    const lockButtons = screen.getAllByRole('button', { name: /Lock Session/i });
+    fireEvent.click(lockButtons[0]);
+
+    // Should now show the AuthScreen
+    await waitFor(() => {
+      expect(screen.getByText('Continue as Guest / Instant Demo')).toBeInTheDocument();
+    });
+
+    // Click Continue as Guest
+    fireEvent.click(screen.getByText('Continue as Guest / Instant Demo'));
+
+    // Should return to main workspace
+    await waitFor(() => {
+      expect(screen.getByText('Workspace Overview')).toBeInTheDocument();
+    });
   });
 });

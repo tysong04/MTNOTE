@@ -30,6 +30,8 @@ interface ChatsViewProps {
   previewChat?: ParseResult | null;
   onDiscardPreview?: () => void;
   onSavePreview?: (chat: PersistedChat) => void;
+  initialSelectedChatId?: string | null;
+  initialHighlightedMessageId?: string | null;
 }
 
 export const ChatsPlaceholderView: React.FC<ChatsViewProps> = ({
@@ -37,15 +39,36 @@ export const ChatsPlaceholderView: React.FC<ChatsViewProps> = ({
   previewChat,
   onDiscardPreview,
   onSavePreview,
+  initialSelectedChatId,
+  initialHighlightedMessageId,
 }) => {
   const persistedChats = useLiveQuery(() => getAllChats(), []);
-  const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
+  const [selectedChatId, setSelectedChatId] = useState<string | null>(initialSelectedChatId || null);
   const [selectedChatMessages, setSelectedChatMessages] = useState<PersistedMessage[]>([]);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [messageSearchQuery, setMessageSearchQuery] = useState('');
   const [chatToDelete, setChatToDelete] = useState<PersistedChat | null>(null);
   const [isSavingPreview, setIsSavingPreview] = useState(false);
   const [previewSaved, setPreviewSaved] = useState(false);
+
+  useEffect(() => {
+    if (initialSelectedChatId) {
+      setSelectedChatId(initialSelectedChatId);
+    }
+  }, [initialSelectedChatId]);
+
+  // When messages load, auto-scroll to highlighted message if present
+  useEffect(() => {
+    if (initialHighlightedMessageId && selectedChatMessages.length > 0) {
+      const timer = setTimeout(() => {
+        const el = document.getElementById(`msg-${initialHighlightedMessageId}`);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [initialHighlightedMessageId, selectedChatMessages]);
 
   // When a chat is selected, fetch its messages from IndexedDB
   useEffect(() => {
@@ -267,15 +290,20 @@ export const ChatsPlaceholderView: React.FC<ChatsViewProps> = ({
             </div>
           ) : (
             <div className="space-y-2.5 max-h-[600px] overflow-y-auto rounded-2xl border border-slate-200 bg-slate-50/50 p-4">
-              {filteredMessages.map((msg) => (
-                <div
-                  key={msg.id}
-                  className={`p-3.5 rounded-xl text-xs transition-colors shadow-2xs ${
-                    msg.isSystem
-                      ? 'bg-amber-50/70 border border-amber-200/60 text-slate-700 italic'
-                      : 'bg-white border border-slate-200 text-slate-900'
-                  }`}
-                >
+              {filteredMessages.map((msg) => {
+                const isHighlighted = initialHighlightedMessageId === msg.id;
+                return (
+                  <div
+                    key={msg.id}
+                    id={`msg-${msg.id}`}
+                    className={`p-3.5 rounded-xl text-xs transition-all shadow-2xs ${
+                      isHighlighted
+                        ? 'ring-2 ring-indigo-500 bg-indigo-50/80 border-indigo-300'
+                        : msg.isSystem
+                        ? 'bg-amber-50/70 border border-amber-200/60 text-slate-700 italic'
+                        : 'bg-white border border-slate-200 text-slate-900'
+                    }`}
+                  >
                   <div className="flex items-center justify-between gap-2 mb-1.5">
                     <div className="flex items-center gap-1.5">
                       {msg.isSystem ? (
@@ -293,8 +321,9 @@ export const ChatsPlaceholderView: React.FC<ChatsViewProps> = ({
                   <p className="whitespace-pre-wrap break-words text-slate-800 leading-relaxed font-sans">
                     {msg.content}
                   </p>
-                </div>
-              ))}
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>

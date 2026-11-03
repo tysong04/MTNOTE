@@ -6,12 +6,15 @@ import {
   Search,
   Sparkles,
   Settings,
+  User,
   ChevronLeft,
   ChevronRight,
   ShieldCheck,
-  Upload
+  Upload,
+  LogOut
 } from 'lucide-react';
 import { NavTab } from '@/types/navigation';
+import { UserProfile } from '@/core/profile/types';
 
 interface SidebarProps {
   currentTab: NavTab;
@@ -21,6 +24,8 @@ interface SidebarProps {
   isMobileOpen: boolean;
   onCloseMobile: () => void;
   onOpenImport: () => void;
+  user?: UserProfile | null;
+  onSignOut?: () => void;
 }
 
 interface NavLinkConfig {
@@ -37,6 +42,7 @@ const NAV_ITEMS: NavLinkConfig[] = [
   { id: 'search', label: 'Search', icon: Search },
   { id: 'insights', label: 'Insights', icon: Sparkles },
   { id: 'settings', label: 'Settings', icon: Settings },
+  { id: 'profile', label: 'Profile', icon: User },
 ];
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -47,6 +53,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   isMobileOpen,
   onCloseMobile,
   onOpenImport,
+  user,
+  onSignOut,
 }) => {
   return (
     <>
@@ -150,19 +158,55 @@ export const Sidebar: React.FC<SidebarProps> = ({
           })}
         </nav>
 
-        {/* Bottom privacy badge */}
-        <div className="p-3 border-t border-slate-100">
+        {/* User Profile Mini Bar & Privacy Badge */}
+        <div className="p-3 border-t border-slate-100 space-y-2">
+          {user && (
+            <div
+              className={`flex items-center gap-2.5 rounded-xl p-2 transition-colors hover:bg-slate-50 cursor-pointer ${
+                isCollapsed ? 'justify-center' : ''
+              }`}
+              onClick={() => {
+                onSelectTab('profile');
+                onCloseMobile();
+              }}
+              title={`Profile: ${user.displayName}`}
+            >
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-indigo-600 text-white font-bold text-xs shadow-xs">
+                {user.avatarInitial}
+              </div>
+              {!isCollapsed && (
+                <div className="flex flex-1 flex-col min-w-0">
+                  <span className="text-xs font-semibold text-slate-800 truncate">{user.displayName}</span>
+                  <span className="text-[10px] text-slate-400 truncate">{user.email}</span>
+                </div>
+              )}
+              {!isCollapsed && onSignOut && (
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onSignOut();
+                  }}
+                  className="p-1 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 transition-colors"
+                  title="Lock Session"
+                >
+                  <LogOut className="h-3.5 w-3.5" />
+                </button>
+              )}
+            </div>
+          )}
+
           <div
             className={`flex items-center gap-2.5 rounded-lg bg-slate-50 border border-slate-200/70 text-slate-600 text-xs
-              ${isCollapsed ? 'justify-center p-2' : 'px-3 py-2.5'}
+              ${isCollapsed ? 'justify-center p-2' : 'px-3 py-2'}
             `}
             title="Local-First Privacy: Data remains on your device"
           >
             <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0" />
             {!isCollapsed && (
               <div className="flex flex-col min-w-0">
-                <span className="font-semibold text-slate-800">Local-First</span>
-                <span className="text-[11px] text-slate-500">100% on device</span>
+                <span className="font-semibold text-slate-800 text-[11px]">Local-First</span>
+                <span className="text-[10px] text-slate-500">100% on device</span>
               </div>
             )}
           </div>

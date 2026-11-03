@@ -1,4 +1,4 @@
-export type NavTab = 'overview' | 'chats' | 'resources' | 'search' | 'insights' | 'settings';
+export type NavTab = 'overview' | 'chats' | 'resources' | 'search' | 'insights' | 'settings' | 'profile';
 
 export interface NavItem {
   id: NavTab;
