@@ -56,7 +56,7 @@ export const SearchView: React.FC<SearchViewProps> = ({ onOpenImport, onNavigate
   const handleExportResults = () => {
     if (results.length === 0) return;
     const lines: string[] = [
-      `# Octonote Search Results for "${query}"`,
+      `# MTNOTE Search Results for "${query}"`,
       `Exported: ${new Date().toLocaleString()}`,
       `Total Matches: ${results.length}\n`,
     ];
@@ -69,7 +69,7 @@ export const SearchView: React.FC<SearchViewProps> = ({ onOpenImport, onNavigate
       lines.push(`- **Excerpt:** *"${r.excerpt}"*\n`);
     }
 
-    triggerFileDownload(lines.join('\n'), `octonote-search-${Date.now()}.md`, 'text/markdown');
+    triggerFileDownload(lines.join('\n'), `mtnote-search-${Date.now()}.md`, 'text/markdown');
   };
 
   const formatDate = (iso: string) => {

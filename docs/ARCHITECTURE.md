@@ -1,15 +1,15 @@
-# Octonote Architecture & Design
+# MTNOTE Architecture & Design
 
-This document details the architectural principles, system design, directory organization, and data flow of **Octonote**.
+This document details the architectural principles, system design, directory organization, and data flow of **MTNOTE**.
 
 ---
 
 ## 1. Architectural Philosophy
 
-Octonote is built on four core principles:
+MTNOTE is built on four core principles:
 
 1. **Local-First & Zero Egress**: All parsing, storage, full-text indexing, resource extraction, and summarization occur strictly on the client device. The application performs zero network requests to external APIs or remote databases.
-2. **Deterministic & Verifiable**: Instead of relying on non-deterministic external LLMs that hallucinate, Octonote uses pure, testable algorithms. Every extracted resource, decision, and action item retains traceable pointers to its exact source message and line number.
+2. **Deterministic & Verifiable**: Instead of relying on non-deterministic external LLMs that hallucinate, MTNOTE uses pure, testable algorithms. Every extracted resource, decision, and action item retains traceable pointers to its exact source message and line number.
 3. **Reactive Local Storage**: The user interface reflects changes instantaneously using `dexie-react-hooks` (`useLiveQuery`). When a new chat is imported or deleted, all connected views (Overview, Chats, Resources, Search, Insights) update automatically without manual page reloads.
 4. **Clean Layer Separation**: Pure business logic (parsers, extractors, storage queries, export generators) lives in `src/core/` and remains completely decoupled from React presentation components.
 
@@ -44,7 +44,7 @@ flowchart TD
     end
 
     subgraph STORAGE ["Local Persistence Layer"]
-        DB["OctonoteDatabase (Dexie.js)"]
+        DB["MTNoteDatabase (Dexie.js)"]
         CHATS_TABLE[("chats Table")]
         MSGS_TABLE[("messages Table")]
         RES_TABLE[("resources Table")]
@@ -116,7 +116,7 @@ The codebase is organized into modular layers:
 - **`extractor/`**:
   - `url-extractor.ts`: Regex link parser with trailing punctuation cleanup, parenthetical URL preservation, and inferred display labels.
 - **`search/`**:
-  - `search-service.ts`: `OctonoteSearchEngine` wrapping `MiniSearch`. Indexes messages and resources with fuzzy matching (0.2), prefix matching, and centered excerpts.
+  - `search-service.ts`: `MTNoteSearchEngine` wrapping `MiniSearch`. Indexes messages and resources with fuzzy matching (0.2), prefix matching, and centered excerpts.
 - **`intelligence/`**:
   - `summary-service.ts`: Deterministic extractive summary engine extracting decisions, action items, assignees, and topic frequency.
   - `qa-service.ts`: Retrieval-based Q&A engine scoring messages against questions with strict confidence thresholding and honest fallback.
@@ -139,7 +139,7 @@ The codebase is organized into modular layers:
 
 ## 4. Reactive Data Flow Pattern
 
-Octonote utilizes **Dexie React Hooks** (`useLiveQuery`) for reactive state management:
+MTNOTE utilizes **Dexie React Hooks** (`useLiveQuery`) for reactive state management:
 
 ```typescript
 // Example: src/features/resources/ResourcesPlaceholderView.tsx
@@ -156,7 +156,7 @@ const chats = useLiveQuery(() => getAllChats(), []);
 
 ## 5. Navigation & Cross-Tab Deep Linking
 
-Octonote coordinates deep-linking across views using a simple state lifting pattern in `App.tsx`:
+MTNOTE coordinates deep-linking across views using a simple state lifting pattern in `App.tsx`:
 
 ```typescript
 // App.tsx

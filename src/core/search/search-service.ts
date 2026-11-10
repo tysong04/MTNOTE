@@ -42,7 +42,7 @@ export interface SearchOptions {
   limit?: number;
 }
 
-export class OctonoteSearchEngine {
+export class MTNoteSearchEngine {
   private miniSearch: MiniSearch<IndexedSearchDocument>;
   private documentsMap: Map<string, IndexedSearchDocument> = new Map();
 
@@ -263,5 +263,8 @@ export class OctonoteSearchEngine {
   }
 }
 
+// Backwards-compatibility alias
+export { MTNoteSearchEngine as OctonoteSearchEngine };
+
 // Global search engine instance
-export const searchEngine = new OctonoteSearchEngine();
+export const searchEngine = new MTNoteSearchEngine();

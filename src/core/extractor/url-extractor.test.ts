@@ -11,7 +11,7 @@ describe('Deterministic URL Extractor', () => {
     id: 'chat_123_0',
     chatId: 'chat_123',
     sequenceIndex: 0,
-    content: 'Check out https://github.com/octonote/core for the latest commit.',
+    content: 'Check out https://github.com/mtnote/core for the latest commit.',
     sender: 'Alice',
     timestamp: '2024-01-15T10:30:00.000Z',
     sourceLineStart: 12,
@@ -27,7 +27,7 @@ describe('Deterministic URL Extractor', () => {
     expect(res.chatId).toBe('chat_123');
     expect(res.messageId).toBe('chat_123_0');
     expect(res.type).toBe('url');
-    expect(res.rawUrl).toBe('https://github.com/octonote/core');
+    expect(res.rawUrl).toBe('https://github.com/mtnote/core');
     expect(res.domain).toBe('github.com');
     expect(res.displayLabel).toBe('GitHub link');
     expect(res.sender).toBe('Alice');
@@ -96,7 +96,7 @@ describe('Deterministic URL Extractor', () => {
       ...baseMessage,
       content: `Here are two resources:
 1. https://arxiv.org/abs/2301.00001
-2. https://github.com/octonote/app/releases.
+2. https://github.com/mtnote/app/releases.
 Let me know which you prefer.`,
     };
 
@@ -104,7 +104,7 @@ Let me know which you prefer.`,
     expect(resources.length).toBe(2);
     expect(resources[0].rawUrl).toBe('https://arxiv.org/abs/2301.00001');
     expect(resources[0].id).toBe('res_chat_123_0_0');
-    expect(resources[1].rawUrl).toBe('https://github.com/octonote/app/releases');
+    expect(resources[1].rawUrl).toBe('https://github.com/mtnote/app/releases');
     expect(resources[1].id).toBe('res_chat_123_0_1');
   });
 

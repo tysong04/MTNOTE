@@ -53,7 +53,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onAuthenticated, onConti
   };
 
   const handleQuickDemo = () => {
-    const res = registerLocalProfile('Local Explorer', 'explorer@octonote.local', 'Personal Knowledge Base');
+    const res = registerLocalProfile('Local Explorer', 'explorer@mtnote.local', 'Personal Knowledge Base');
     if (res.success && res.profile) {
       onAuthenticated(res.profile);
     } else if (existingProfile) {
@@ -67,10 +67,10 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onAuthenticated, onConti
         {/* Branding header */}
         <div className="text-center space-y-2">
           <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-600 text-white font-bold text-2xl shadow-lg shadow-indigo-500/25 ring-4 ring-indigo-50">
-            O
+            M
           </div>
           <h1 className="text-2xl font-black tracking-tight text-slate-900">
-            Octonote
+            MTNOTE
           </h1>
           <p className="text-xs text-slate-500 max-w-xs mx-auto">
             Your private, offline-first personal knowledge base for WhatsApp conversations.
@@ -232,7 +232,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onAuthenticated, onConti
                 100% Local-First &amp; Device Scoped
               </p>
               <p className="text-[11px] text-indigo-700/90 leading-relaxed">
-                Octonote runs completely in your browser. Profile settings and chat files are never uploaded to any remote server or external authentication provider.
+                MTNOTE runs completely in your browser. Profile settings and chat files are never uploaded to any remote server or external authentication provider.
               </p>
             </div>
           </div>

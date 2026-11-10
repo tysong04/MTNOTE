@@ -22,7 +22,7 @@ export function triggerFileDownload(content: string | Blob, filename: string, mi
 export function exportSummaryToMarkdown(summary: ChatSummary): string {
   const lines: string[] = [];
 
-  lines.push(`# Octonote Summary: ${summary.chatName}`);
+  lines.push(`# MTNOTE Summary: ${summary.chatName}`);
   lines.push(`*Generated on ${new Date(summary.generatedAt).toLocaleString()}*\n`);
   lines.push(`> ${summary.disclaimer}\n`);
 
@@ -67,7 +67,7 @@ export function exportSummaryToMarkdown(summary: ChatSummary): string {
     }
   }
 
-  lines.push(`\n---\n*Exported locally from Octonote — Zero external cloud transmission.*`);
+  lines.push(`\n---\n*Exported locally from MTNOTE — Zero external cloud transmission.*`);
   return lines.join('\n');
 }
 
@@ -77,7 +77,7 @@ export function exportSummaryToMarkdown(summary: ChatSummary): string {
 export function exportResourcesToMarkdown(resources: ExtractedResource[], title = 'Knowledge Resources'): string {
   const lines: string[] = [];
 
-  lines.push(`# Octonote: ${title}`);
+  lines.push(`# MTNOTE: ${title}`);
   lines.push(`*Exported on ${new Date().toLocaleString()}*\n`);
   lines.push(`Total Resources: ${resources.length}\n`);
 
@@ -91,7 +91,7 @@ export function exportResourcesToMarkdown(resources: ExtractedResource[], title 
     lines.push('');
   }
 
-  lines.push(`---\n*Exported locally from Octonote.*`);
+  lines.push(`---\n*Exported locally from MTNOTE.*`);
   return lines.join('\n');
 }
 
@@ -103,7 +103,7 @@ export function exportSummaryToHtml(summary: ChatSummary): string {
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Octonote Summary - ${escapeHtml(summary.chatName)}</title>
+  <title>MTNOTE Summary - ${escapeHtml(summary.chatName)}</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #1e293b; max-width: 800px; margin: 40px auto; padding: 0 20px; }
     h1 { color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; margin-bottom: 4px; }
@@ -119,7 +119,7 @@ export function exportSummaryToHtml(summary: ChatSummary): string {
   </style>
 </head>
 <body>
-  <h1>Octonote Summary: ${escapeHtml(summary.chatName)}</h1>
+  <h1>MTNOTE Summary: ${escapeHtml(summary.chatName)}</h1>
   <div class="subtitle">Generated on ${new Date(summary.generatedAt).toLocaleString()} &middot; ${summary.totalMessagesAnalyzed} messages analyzed</div>
   
   <div class="disclaimer">${escapeHtml(summary.disclaimer)}</div>
@@ -157,7 +157,7 @@ export function exportSummaryToHtml(summary: ChatSummary): string {
   </ul>
 
   <hr style="margin-top: 40px; border: 0; border-top: 1px solid #e2e8f0;">
-  <div class="meta" style="text-align: center;">Exported locally from Octonote &middot; Local-first & Private</div>
+  <div class="meta" style="text-align: center;">Exported locally from MTNOTE &middot; Local-first & Private</div>
 </body>
 </html>`;
 }
@@ -216,7 +216,7 @@ export function generatePdfBlob(title: string, sections: { heading: string; line
     'BT',
     '/F2 8 Tf',
     `${margin} 35 Td`,
-    `(${escapePdfString(`Octonote Export - ${new Date().toLocaleDateString()} - Local-first & Private`)}) Tj`,
+    `(${escapePdfString(`MTNOTE Export - ${new Date().toLocaleDateString()} - Local-first & Private`)}) Tj`,
     'ET'
   );
 

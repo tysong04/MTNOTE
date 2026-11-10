@@ -289,7 +289,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
               <div className="sm:col-span-2 flex items-center justify-between p-3.5 rounded-xl border border-slate-200 bg-slate-50/50">
                 <div className="space-y-0.5">
                   <span className="text-xs font-semibold text-slate-800 block">Default Landing Tab</span>
-                  <span className="text-[11px] text-slate-500 block">Initial screen when opening Octonote</span>
+                  <span className="text-[11px] text-slate-500 block">Initial screen when opening MTNOTE</span>
                 </div>
                 <select
                   value={defaultTab}

@@ -4,14 +4,14 @@ import { parseWhatsAppText, deriveChatNameFromFileName } from './whatsapp-parser
 describe('WhatsApp Text Parser', () => {
   it('correctly derives chat title from filenames', () => {
     expect(deriveChatNameFromFileName('WhatsApp Chat with Alice Smith.txt')).toBe('Alice Smith');
-    expect(deriveChatNameFromFileName('WhatsApp Chat - Octonote Core.txt')).toBe('Octonote Core');
+    expect(deriveChatNameFromFileName('WhatsApp Chat - MTNOTE Core.txt')).toBe('MTNOTE Core');
     expect(deriveChatNameFromFileName('family_group.txt')).toBe('family_group');
     expect(deriveChatNameFromFileName('')).toBe('WhatsApp Conversation');
   });
 
   it('parses standard Android 24-hour format with single and multiline messages', () => {
     const raw = `15/01/2024, 10:30 - Messages and calls are end-to-end encrypted. No one outside of this chat, not even WhatsApp, can read or listen to them.
-15/01/2024, 10:31 - Alice: Hello everyone! Welcome to the Octonote development group.
+15/01/2024, 10:31 - Alice: Hello everyone! Welcome to the MTNOTE development group.
 15/01/2024, 10:32 - Bob: Thanks Alice!
 Here is the initial requirements outline:
 1. Local-first parser
@@ -36,7 +36,7 @@ Please let me know your thoughts.
 
     // Check single-line message
     expect(result.messages[1].sender).toBe('Alice');
-    expect(result.messages[1].content).toBe('Hello everyone! Welcome to the Octonote development group.');
+    expect(result.messages[1].content).toBe('Hello everyone! Welcome to the MTNOTE development group.');
     expect(result.messages[1].sourceLineStart).toBe(2);
     expect(result.messages[1].sourceLineEnd).toBe(2);
 
@@ -56,14 +56,14 @@ Please let me know your thoughts.
     const raw = `[15/01/24, 10:30:15 AM] Alice: Good morning!
 [15/01/24, 10:31:00 AM] Dr. John [Lead Architect] 💻: Morning Alice. Check this doc: https://example.com/spec.pdf
 [15/01/24, 02:45:20 PM] Alice: Reviewed and approved.
-[15/01/24, 02:46:00 PM] Alice changed the subject to "Octonote 2.0"`;
+[15/01/24, 02:46:00 PM] Alice changed the subject to "MTNOTE 2.0"`;
 
     const result = parseWhatsAppText(raw, { fileName: 'ios_export.txt' });
 
     expect(result.success).toBe(true);
     expect(result.metadata.totalMessages).toBe(4);
     expect(result.metadata.participants).toEqual(['Alice', 'Dr. John [Lead Architect] 💻']);
-    expect(result.metadata.chatName).toBe('Octonote 2.0'); // Inferred from subject change
+    expect(result.metadata.chatName).toBe('MTNOTE 2.0'); // Inferred from subject change
 
     // PM conversion verification: 2:45 PM -> hour 14
     expect(result.messages[2].date.getHours()).toBe(14);
@@ -75,7 +75,7 @@ Please let me know your thoughts.
 
     // Check iOS system message
     expect(result.messages[3].isSystem).toBe(true);
-    expect(result.messages[3].content).toContain('changed the subject to "Octonote 2.0"');
+    expect(result.messages[3].content).toContain('changed the subject to "MTNOTE 2.0"');
   });
 
   it('handles Unicode, emojis, non-Latin alphabets and narrow no-break spaces', () => {

@@ -115,7 +115,7 @@ export const IntelligenceView: React.FC<IntelligenceViewProps> = ({
       },
     ];
 
-    const pdfBlob = generatePdfBlob(`Octonote Summary: ${summary.chatName}`, sections);
+    const pdfBlob = generatePdfBlob(`MTNOTE Summary: ${summary.chatName}`, sections);
     triggerFileDownload(pdfBlob, `summary-${summary.chatName.replace(/\s+/g, '_')}.pdf`, 'application/pdf');
   };
 

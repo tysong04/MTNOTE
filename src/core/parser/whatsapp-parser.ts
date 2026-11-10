@@ -42,7 +42,7 @@ const SYSTEM_PREFIXES = [
  * Derives a human-friendly chat title from the exported filename
  * Examples:
  *  "WhatsApp Chat with Alice Smith.txt" -> "Alice Smith"
- *  "WhatsApp Chat - Octonote Dev.txt" -> "Octonote Dev"
+ *  "WhatsApp Chat - MTNOTE Dev.txt" -> "MTNOTE Dev"
  *  "chat_export_2024.txt" -> "chat_export_2024"
  */
 export function deriveChatNameFromFileName(fileName: string): string {

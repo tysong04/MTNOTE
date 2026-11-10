@@ -43,7 +43,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
           </h2>
 
           <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-            Octonote extracts shared links, decisions, and conversation context from exported WhatsApp chats — securely stored and processed strictly within your local browser.
+            MTNOTE extracts shared links, decisions, and conversation context from exported WhatsApp chats — securely stored and processed strictly within your local browser.
           </p>
 
           <div className="pt-2 flex flex-wrap items-center gap-3">

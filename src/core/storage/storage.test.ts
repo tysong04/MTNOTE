@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { OctonoteDatabase } from './db';
+import { MTNoteDatabase } from './db';
 import {
   saveChat,
   getChat,
@@ -18,11 +18,11 @@ import {
 import { parseWhatsAppText } from '../parser/whatsapp-parser';
 
 describe('Local Persistence Layer (IndexedDB / Dexie)', () => {
-  let testDb: OctonoteDatabase;
-  const testDbName = `octonote_test_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
+  let testDb: MTNoteDatabase;
+  const testDbName = `mtnote_test_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
 
   beforeEach(() => {
-    testDb = new OctonoteDatabase(testDbName);
+    testDb = new MTNoteDatabase(testDbName);
   });
 
   afterEach(async () => {
@@ -30,7 +30,7 @@ describe('Local Persistence Layer (IndexedDB / Dexie)', () => {
   });
 
   const sampleChatText = `15/01/2024, 10:30 - Messages and calls are end-to-end encrypted.
-15/01/2024, 10:31 - Alice: Hey Bob, check this out: https://github.com/octonote/app.
+15/01/2024, 10:31 - Alice: Hey Bob, check this out: https://github.com/mtnote/app.
 15/01/2024, 10:32 - Bob: Sounds great! Testing multiline message with doc:
 Here is the spec: https://example.com/spec.pdf.
 Line 3 of Bob's message
@@ -60,7 +60,7 @@ Line 3 of Bob's message
     expect(messages.length).toBe(4);
     expect(messages[0].isSystem).toBe(true);
     expect(messages[1].sender).toBe('Alice');
-    expect(messages[1].content).toContain('https://github.com/octonote/app');
+    expect(messages[1].content).toContain('https://github.com/mtnote/app');
     expect(messages[2].sender).toBe('Bob');
     expect(messages[2].content).toContain('https://example.com/spec.pdf');
     expect(messages[3].sender).toBe('Alice');
@@ -85,7 +85,7 @@ Line 3 of Bob's message
     expect(resources[0].domain).toBe('example.com');
     expect(resources[0].chatId).toBe(saved.id);
 
-    expect(resources[1].rawUrl).toBe('https://github.com/octonote/app');
+    expect(resources[1].rawUrl).toBe('https://github.com/mtnote/app');
     expect(resources[1].displayLabel).toBe('GitHub link');
     expect(resources[1].domain).toBe('github.com');
     expect(resources[1].chatId).toBe(saved.id);
@@ -206,7 +206,7 @@ Line 3 of Bob's message
     testDb.close();
 
     // Reopen using another instance targeting same db name
-    const reopenedDb = new OctonoteDatabase(testDbName);
+    const reopenedDb = new MTNoteDatabase(testDbName);
     const retrievedChat = await getChat(saved.id, reopenedDb);
     expect(retrievedChat).toBeDefined();
     expect(retrievedChat?.chatName).toBe(saved.chatName);

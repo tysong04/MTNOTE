@@ -1,6 +1,6 @@
-# Octonote Roadmap & Evolution Plan
+# MTNOTE Roadmap & Evolution Plan
 
-This document outlines the current state of **Octonote**, current architectural boundaries, and sensible future enhancements.
+This document outlines the current state of **MTNOTE**, current architectural boundaries, and sensible future enhancements.
 
 ---
 
@@ -8,7 +8,7 @@ This document outlines the current state of **Octonote**, current architectural 
 
 - [x] **Application Shell**: Modern, responsive layout with collapsible navigation, tab routing, and local-first status indicators.
 - [x] **Import & Stream Parser**: Streaming parser for Android and iOS WhatsApp exports (`.txt`), safe in-memory `.zip` extraction, Zip Slip traversal protection, and zip bomb expansion limits.
-- [x] **Persistence Engine**: Client-side IndexedDB (`OctonoteDatabase` via Dexie.js v2) with SHA-256 duplicate detection and cascading deletion.
+- [x] **Persistence Engine**: Client-side IndexedDB (`MTNoteDatabase` via Dexie.js v2) with SHA-256 duplicate detection and cascading deletion.
 - [x] **Conversation Viewer**: Full message thread viewer with in-chat search, participants, and targeted message auto-scroll with focus ring.
 - [x] **Deterministic Resource Extraction**: Explicit `http://` and `https://` extraction, trailing punctuation cleanup, parenthetical URL preservation, inferred display labels, and source line references.
 - [x] **Full-Text Search**: In-memory `MiniSearch` index across messages and links with typo-tolerant fuzzy matching, scope pills, and centered excerpts.

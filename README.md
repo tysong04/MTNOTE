@@ -1,4 +1,4 @@
-# Octonote
+# MTNOTE
 
 > **Local-First Personal Knowledge Base for WhatsApp Exports**  
 > Convert exported WhatsApp conversations (`.txt` and `.zip`) into an organized, searchable, verifiable personal workspace—100% on-device with zero cloud transmission.
@@ -9,7 +9,7 @@
 
 WhatsApp conversations often contain critical information: shared links, team decisions, project deadlines, and action items. However, chat history is locked in unstructured threads or raw text exports.
 
-**Octonote** transforms your WhatsApp export files into a structured, searchable, and actionable personal knowledge base. Everything runs entirely in your local browser using IndexedDB, Web Crypto, and client-side indexing. Your personal conversations are **never uploaded to external servers, cloud databases, or third-party AI APIs**.
+**MTNOTE** transforms your WhatsApp export files into a structured, searchable, and actionable personal knowledge base. Everything runs entirely in your local browser using IndexedDB, Web Crypto, and client-side indexing. Your personal conversations are **never uploaded to external servers, cloud databases, or third-party AI APIs**.
 
 ---
 
@@ -22,7 +22,7 @@ WhatsApp conversations often contain critical information: shared links, team de
   - Safe ZIP decompression in-memory with Zip Slip traversal protection and zip bomb expansion limits.
 
 - 💾 **Reliable Local Persistence (IndexedDB & Dexie)**
-  - Transactional storage of chats, messages, and resources in client-side IndexedDB (`OctonoteDatabase`).
+  - Transactional storage of chats, messages, and resources in client-side IndexedDB (`MTNoteDatabase`).
   - SHA-256 conversation hashing using the Web Crypto API to detect duplicate imports with overwrite/skip options.
   - Data persists across browser refreshes and tab re-openings.
 
@@ -90,7 +90,7 @@ WhatsApp conversations often contain critical information: shared links, team de
 
 ## 📋 Prerequisites
 
-Before running Octonote, make sure you have:
+Before running MTNOTE, make sure you have:
 - **Node.js**: `v18.0.0` or higher (`v20+` or `v24+` recommended).
 - **npm**: `v9.0.0` or higher.
 - **Modern Web Browser**: Google Chrome, Mozilla Firefox, Microsoft Edge, or Safari with IndexedDB and Web Crypto API support.
@@ -137,7 +137,7 @@ Open [http://localhost:5173](http://localhost:5173) in your web browser.
 ## 📂 Project Structure
 
 ```text
-octonote/
+mtnote/
 ├── docs/                     # Comprehensive architecture and developer docs
 │   ├── ARCHITECTURE.md       # High-level architecture, modules, and data flow
 │   ├── DATA_MODEL.md         # IndexedDB schema, entity definitions, and migrations
@@ -183,7 +183,7 @@ octonote/
 
 ## 🧪 Testing & Verification
 
-Octonote includes automated unit, integration, and UI tests across all modules.
+MTNOTE includes automated unit, integration, and UI tests across all modules.
 
 ```bash
 # Run all automated tests

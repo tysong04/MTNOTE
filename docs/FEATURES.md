@@ -1,6 +1,6 @@
-# Octonote Feature Implementation & Technical Guide
+# MTNOTE Feature Implementation & Technical Guide
 
-This document provides an in-depth breakdown of how every feature in **Octonote** is implemented, the algorithms used, and its specific operational boundaries.
+This document provides an in-depth breakdown of how every feature in **MTNOTE** is implemented, the algorithms used, and its specific operational boundaries.
 
 ---
 

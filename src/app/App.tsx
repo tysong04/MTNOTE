@@ -51,7 +51,7 @@ export const App: React.FC = () => {
   };
 
   const handleContinueAsGuest = () => {
-    const res = registerLocalProfile('Local Explorer', 'explorer@octonote.local', 'Personal WhatsApp Archive');
+    const res = registerLocalProfile('Local Explorer', 'explorer@mtnote.local', 'Personal WhatsApp Archive');
     if (res.success && res.profile) {
       handleAuthenticated(res.profile);
     }

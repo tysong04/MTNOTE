@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { OctonoteSearchEngine } from './search-service';
+import { MTNoteSearchEngine } from './search-service';
 import { PersistedChat, PersistedMessage } from '../storage/types';
 import { ExtractedResource } from '../extractor/types';
 
-describe('OctonoteSearchEngine', () => {
-  let engine: OctonoteSearchEngine;
+describe('MTNoteSearchEngine', () => {
+  let engine: MTNoteSearchEngine;
 
   const mockChats: PersistedChat[] = [
     {
@@ -64,7 +64,7 @@ describe('OctonoteSearchEngine', () => {
       timestamp: '2026-01-01T10:05:00.000Z',
       sender: 'Bob',
       isSystem: false,
-      content: 'Great! Please check the documentation at https://github.com/octonote/api before release.',
+      content: 'Great! Please check the documentation at https://github.com/mtnote/api before release.',
       sourceLineStart: 2,
       sourceLineEnd: 2,
     },
@@ -88,10 +88,10 @@ describe('OctonoteSearchEngine', () => {
       chatId: 'chat_1',
       messageId: 'msg_2',
       type: 'url',
-      rawUrl: 'https://github.com/octonote/api',
+      rawUrl: 'https://github.com/mtnote/api',
       domain: 'github.com',
       displayLabel: 'GitHub link',
-      context: 'Great! Please check the documentation at https://github.com/octonote/api before release.',
+      context: 'Great! Please check the documentation at https://github.com/mtnote/api before release.',
       sender: 'Bob',
       timestamp: '2026-01-01T10:05:00.000Z',
       sourceLineStart: 2,
@@ -101,7 +101,7 @@ describe('OctonoteSearchEngine', () => {
   ];
 
   beforeEach(() => {
-    engine = new OctonoteSearchEngine();
+    engine = new MTNoteSearchEngine();
     engine.buildIndex(mockChats, mockMessages, mockResources);
   });
 
@@ -127,7 +127,7 @@ describe('OctonoteSearchEngine', () => {
     const resResult = results.find((r) => r.type === 'resource');
     expect(resResult).toBeDefined();
     expect(resResult?.domain).toBe('github.com');
-    expect(resResult?.rawUrl).toBe('https://github.com/octonote/api');
+    expect(resResult?.rawUrl).toBe('https://github.com/mtnote/api');
   });
 
   it('respects scope filtering (messages only or resources only)', () => {

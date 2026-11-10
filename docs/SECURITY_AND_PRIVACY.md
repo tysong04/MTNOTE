@@ -1,6 +1,6 @@
-# Octonote Security & Privacy Audit
+# MTNOTE Security & Privacy Audit
 
-Octonote is designed from the ground up as a **local-first, privacy-preserving application**. This document outlines our data privacy boundaries, threat model, and security safeguards.
+MTNOTE is designed from the ground up as a **local-first, privacy-preserving application**. This document outlines our data privacy boundaries, threat model, and security safeguards.
 
 ---
 
@@ -9,7 +9,7 @@ Octonote is designed from the ground up as a **local-first, privacy-preserving a
 | Data Category | Storage Location | Leaves Device? | Encryption |
 |---|---|---|---|
 | **WhatsApp `.txt` & `.zip` Files** | Processed in-memory | **Never** | N/A (memory only) |
-| **Parsed Message Content** | Browser IndexedDB (`OctonoteDatabase`) | **Never** | Browser origin sandbox |
+| **Parsed Message Content** | Browser IndexedDB (`MTNoteDatabase`) | **Never** | Browser origin sandbox |
 | **Extracted URLs & Links** | Browser IndexedDB (`resources`) | **Never** | Browser origin sandbox |
 | **Search Indexes** | In-memory RAM (`MiniSearch`) | **Never** | RAM only |
 | **Summaries & Q&A Queries** | Computed on-device | **Never** | RAM only |
@@ -39,7 +39,7 @@ A static code analysis of all source files confirms **0 occurrences** of:
 - This prevents reverse tab-napping and prevents the opened page from accessing `window.opener`.
 
 ### 4. Deterministic URL Extraction (No Scraping)
-- Octonote does not make HTTP requests to "unfurl" link previews, fetch titles, or inspect remote website contents. Display labels are inferred purely from domain and path suffixes.
+- MTNOTE does not make HTTP requests to "unfurl" link previews, fetch titles, or inspect remote website contents. Display labels are inferred purely from domain and path suffixes.
 
 ---
 
@@ -58,7 +58,7 @@ A static code analysis of all source files confirms **0 occurrences** of:
 
 ## 4. Privacy Considerations When Exposing via Tunnels (e.g. ngrok)
 
-If you expose Octonote through reverse-proxy tunnels like ngrok for remote testing:
+If you expose MTNOTE through reverse-proxy tunnels like ngrok for remote testing:
 
 1. **IndexedDB Is Scoped to Origin**:
    - Conversations stored while using `http://localhost:5173` live in your PC's browser.
@@ -73,6 +73,6 @@ If you expose Octonote through reverse-proxy tunnels like ngrok for remote testi
 
 ## 5. Data Deletion & Purge Guarantees
 
-Octonote provides full data control in the UI:
+MTNOTE provides full data control in the UI:
 - **Individual Conversation Deletion**: Permanently deletes the conversation metadata, all message rows, and all extracted resources in a single atomic IndexedDB transaction.
 - **Full Database Purge** (`SettingsView.tsx` / `ProfileView.tsx`): Completely clears all `chats`, `messages`, and `resources` tables.

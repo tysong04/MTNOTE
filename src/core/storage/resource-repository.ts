@@ -1,11 +1,11 @@
-import { db as defaultDb, OctonoteDatabase } from './db';
+import { db as defaultDb, MTNoteDatabase } from './db';
 import { ExtractedResource } from '../extractor/types';
 
 /**
  * Retrieves all extracted resources across all chats ordered by timestamp descending.
  */
 export async function getAllResources(
-  targetDb: OctonoteDatabase = defaultDb
+  targetDb: MTNoteDatabase = defaultDb
 ): Promise<ExtractedResource[]> {
   const resources = await targetDb.resources.toArray();
   return resources.sort(
@@ -18,7 +18,7 @@ export async function getAllResources(
  */
 export async function getResourcesByChat(
   chatId: string,
-  targetDb: OctonoteDatabase = defaultDb
+  targetDb: MTNoteDatabase = defaultDb
 ): Promise<ExtractedResource[]> {
   const resources = await targetDb.resources.where('chatId').equals(chatId).toArray();
   return resources.sort(
@@ -31,7 +31,7 @@ export async function getResourcesByChat(
  */
 export async function getResourcesByDomain(
   domain: string,
-  targetDb: OctonoteDatabase = defaultDb
+  targetDb: MTNoteDatabase = defaultDb
 ): Promise<ExtractedResource[]> {
   const resources = await targetDb.resources.where('domain').equals(domain).toArray();
   return resources.sort(
@@ -43,7 +43,7 @@ export async function getResourcesByDomain(
  * Retrieves aggregate resource statistics.
  */
 export async function getResourceStats(
-  targetDb: OctonoteDatabase = defaultDb
+  targetDb: MTNoteDatabase = defaultDb
 ): Promise<{ total: number; uniqueDomains: number }> {
   const resources = await targetDb.resources.toArray();
   const domains = new Set(resources.map((r) => r.domain));

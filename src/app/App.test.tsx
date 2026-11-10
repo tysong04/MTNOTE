@@ -3,7 +3,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import App from './App';
 import { db } from '@/core/storage/db';
 
-describe('Octonote Application Shell & Import Workflow', () => {
+describe('MTNOTE Application Shell & Import Workflow', () => {
   beforeEach(async () => {
     await db.chats.clear();
     await db.messages.clear();
@@ -12,7 +12,7 @@ describe('Octonote Application Shell & Import Workflow', () => {
 
   it('renders application branding and header successfully', () => {
     render(<App />);
-    expect(screen.getAllByText('Octonote').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('MTNOTE').length).toBeGreaterThan(0);
     expect(screen.getByText('Workspace Overview')).toBeInTheDocument();
     expect(screen.getByText('Local Storage Only')).toBeInTheDocument();
   });
@@ -90,7 +90,7 @@ describe('Octonote Application Shell & Import Workflow', () => {
     fireEvent.click(importButtons[0]);
 
     const sampleChat = `15/01/2024, 10:30 - Messages and calls are end-to-end encrypted.
-15/01/2024, 10:31 - Alice: Welcome to Octonote!
+15/01/2024, 10:31 - Alice: Welcome to MTNOTE!
 15/01/2024, 10:32 - Bob: Looking forward to testing this.`;
 
     const file = new File([sampleChat], 'WhatsApp Chat with Alice.txt', { type: 'text/plain' });
@@ -104,7 +104,7 @@ describe('Octonote Application Shell & Import Workflow', () => {
     });
 
     expect(screen.getByText('Alice')).toBeInTheDocument();
-    expect(screen.getByText('Welcome to Octonote!')).toBeInTheDocument();
+    expect(screen.getByText('Welcome to MTNOTE!')).toBeInTheDocument();
     expect(screen.getByText('Looking forward to testing this.')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Save to Workspace/i })).toBeInTheDocument();
 
@@ -216,7 +216,7 @@ describe('Octonote Application Shell & Import Workflow', () => {
   it('extracts resources upon import and displays them in the Resources view with safe attributes and source attribution', async () => {
     render(<App />);
 
-    const sampleChat = `15/01/2024, 10:00 - Alice: Check out https://github.com/octonote/app for details.`;
+    const sampleChat = `15/01/2024, 10:00 - Alice: Check out https://github.com/mtnote/app for details.`;
     const file = new File([sampleChat], 'WhatsApp Chat with Alice.txt', { type: 'text/plain' });
 
     const importButtons = screen.getAllByRole('button', { name: /import chat/i });
@@ -244,8 +244,8 @@ describe('Octonote Application Shell & Import Workflow', () => {
       expect(screen.getByText('GitHub link')).toBeInTheDocument();
     });
 
-    const link = screen.getByRole('link', { name: /github\.com\/octonote\/app/i });
-    expect(link).toHaveAttribute('href', 'https://github.com/octonote/app');
+    const link = screen.getByRole('link', { name: /github\.com\/mtnote\/app/i });
+    expect(link).toHaveAttribute('href', 'https://github.com/mtnote/app');
     expect(link).toHaveAttribute('target', '_blank');
     expect(link).toHaveAttribute('rel', 'noopener noreferrer');
 
@@ -282,7 +282,7 @@ describe('Octonote Application Shell & Import Workflow', () => {
 
     // 1. Import a chat with decisions and links
     const chatContent =
-      '15/01/2024, 10:00 - Alice: We agreed to launch the beta and check https://github.com/octonote/app\n' +
+      '15/01/2024, 10:00 - Alice: We agreed to launch the beta and check https://github.com/mtnote/app\n' +
       '15/01/2024, 10:05 - Bob: I will test the release candidate by Friday.\n';
     const file = new File([chatContent], 'search-test.txt', { type: 'text/plain' });
 

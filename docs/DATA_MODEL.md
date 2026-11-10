@@ -1,15 +1,15 @@
-# Octonote Data Model & Storage Guide
+# MTNOTE Data Model & Storage Guide
 
-This document describes the IndexedDB schema, entity definitions, relationships, and schema migration strategies used in Octonote.
+This document describes the IndexedDB schema, entity definitions, relationships, and schema migration strategies used in MTNOTE.
 
 ---
 
 ## 1. Storage Architecture
 
-Octonote utilizes **IndexedDB** managed via **Dexie.js 4** for high-volume relational data (conversations, messages, and extracted links), and **`localStorage`** for lightweight session/profile preferences.
+MTNOTE utilizes **IndexedDB** managed via **Dexie.js 4** for high-volume relational data (conversations, messages, and extracted links), and **`localStorage`** for lightweight session/profile preferences.
 
-- **Database Name**: `octonote_db`
-- **Class**: [`OctonoteDatabase`](file:///c:/Users/yesuraju/OneDrive/PROJECTS/hackathons/projects/OCTONOTE/src/core/storage/db.ts)
+- **Database Name**: `mtnote_db` (with automatic non-blocking migration from legacy `octonote_db`)
+- **Class**: [`MTNoteDatabase`](file:///c:/Users/yesuraju/OneDrive/PROJECTS/hackathons/projects/OCTONOTE/src/core/storage/db.ts)
 - **Scope**: Strictly isolated to the browser's origin (`http://localhost:5173` or deployed host).
 
 ---
@@ -17,12 +17,12 @@ Octonote utilizes **IndexedDB** managed via **Dexie.js 4** for high-volume relat
 ## 2. IndexedDB Schema Versions
 
 ```typescript
-export class OctonoteDatabase extends Dexie {
+export class MTNoteDatabase extends Dexie {
   chats!: Table<PersistedChat, string>;
   messages!: Table<PersistedMessage, string>;
   resources!: Table<ExtractedResource, string>;
 
-  constructor(dbName = 'octonote_db') {
+  constructor(dbName = 'mtnote_db') {
     super(dbName);
 
     // Version 1: Initial conversation storage
@@ -133,7 +133,7 @@ export async function deleteChat(chatId: string): Promise<void> {
 
 ## 5. Local Profile Model (`localStorage`)
 
-User profile details and session locks are stored in `localStorage` under `octonote_user_profile` and `octonote_active_session`.
+User profile details and session locks are stored in `localStorage` under `mtnote_user_profile` (with automatic backward-compatible fallback from `octonote_user_profile`) and `mtnote_active_session`.
 
 ```typescript
 export interface UserProfile {

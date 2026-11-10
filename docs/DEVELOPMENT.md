@@ -1,6 +1,6 @@
-# Octonote Developer & Contributor Guide
+# MTNOTE Developer & Contributor Guide
 
-This guide outlines coding standards, testing practices, development workflows, and common troubleshooting patterns for developing in the **Octonote** codebase.
+This guide outlines coding standards, testing practices, development workflows, and common troubleshooting patterns for developing in the **MTNOTE** codebase.
 
 ---
 

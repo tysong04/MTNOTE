@@ -41,7 +41,7 @@ export const ResourcesPlaceholderView: React.FC<ResourcesViewProps> = ({
   const handleExportMarkdown = () => {
     if (filteredResources.length === 0) return;
     const md = exportResourcesToMarkdown(filteredResources);
-    triggerFileDownload(md, `octonote-resources-${Date.now()}.md`, 'text/markdown');
+    triggerFileDownload(md, `mtnote-resources-${Date.now()}.md`, 'text/markdown');
   };
 
   const handleExportPdf = () => {
@@ -54,8 +54,8 @@ export const ResourcesPlaceholderView: React.FC<ResourcesViewProps> = ({
         ),
       },
     ];
-    const blob = generatePdfBlob('Octonote: Extracted Resources', sections);
-    triggerFileDownload(blob, `octonote-resources-${Date.now()}.pdf`, 'application/pdf');
+    const blob = generatePdfBlob('MTNOTE: Extracted Resources', sections);
+    triggerFileDownload(blob, `mtnote-resources-${Date.now()}.pdf`, 'application/pdf');
   };
 
   // Build a fast lookup for chat names by chatId

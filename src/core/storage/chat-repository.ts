@@ -1,4 +1,4 @@
-import { db as defaultDb, OctonoteDatabase } from './db';
+import { db as defaultDb, MTNoteDatabase } from './db';
 import {
   PersistedChat,
   PersistedMessage,
@@ -25,7 +25,7 @@ export class DuplicateChatError extends Error {
  */
 export async function checkDuplicateChat(
   contentHash: string,
-  targetDb: OctonoteDatabase = defaultDb
+  targetDb: MTNoteDatabase = defaultDb
 ): Promise<DuplicateCheckResult> {
   const existingChat = await targetDb.chats.where('contentHash').equals(contentHash).first();
   return {
@@ -41,7 +41,7 @@ export async function saveChat(
   parseResult: ParseResult,
   rawText?: string,
   options: SaveChatOptions = {},
-  targetDb: OctonoteDatabase = defaultDb
+  targetDb: MTNoteDatabase = defaultDb
 ): Promise<PersistedChat> {
   if (!parseResult.success || parseResult.messages.length === 0) {
     throw new Error('Cannot persist an invalid or empty chat parse result.');
@@ -119,7 +119,7 @@ export async function saveChat(
  */
 export async function getChat(
   chatId: string,
-  targetDb: OctonoteDatabase = defaultDb
+  targetDb: MTNoteDatabase = defaultDb
 ): Promise<PersistedChat | undefined> {
   return targetDb.chats.get(chatId);
 }
@@ -128,7 +128,7 @@ export async function getChat(
  * Retrieves all saved chats ordered by import date descending
  */
 export async function getAllChats(
-  targetDb: OctonoteDatabase = defaultDb
+  targetDb: MTNoteDatabase = defaultDb
 ): Promise<PersistedChat[]> {
   const chats = await targetDb.chats.toArray();
   // Sort descending by importedAt
@@ -140,7 +140,7 @@ export async function getAllChats(
  */
 export async function getChatMessages(
   chatId: string,
-  targetDb: OctonoteDatabase = defaultDb
+  targetDb: MTNoteDatabase = defaultDb
 ): Promise<PersistedMessage[]> {
   return targetDb.messages.where('chatId').equals(chatId).sortBy('sequenceIndex');
 }
@@ -150,7 +150,7 @@ export async function getChatMessages(
  */
 export async function deleteChat(
   chatId: string,
-  targetDb: OctonoteDatabase = defaultDb
+  targetDb: MTNoteDatabase = defaultDb
 ): Promise<void> {
   await targetDb.transaction('rw', [targetDb.chats, targetDb.messages, targetDb.resources], async () => {
     await targetDb.resources.where('chatId').equals(chatId).delete();
@@ -163,7 +163,7 @@ export async function deleteChat(
  * Bulk deletion: purges all stored chats, messages, and resources from the local database
  */
 export async function purgeAllData(
-  targetDb: OctonoteDatabase = defaultDb
+  targetDb: MTNoteDatabase = defaultDb
 ): Promise<void> {
   await targetDb.transaction('rw', [targetDb.chats, targetDb.messages, targetDb.resources], async () => {
     await targetDb.resources.clear();
@@ -176,7 +176,7 @@ export async function purgeAllData(
  * Returns overall storage counts
  */
 export async function getStorageStats(
-  targetDb: OctonoteDatabase = defaultDb
+  targetDb: MTNoteDatabase = defaultDb
 ): Promise<StorageStats> {
   const [chatCount, messageCount, resourceCount] = await Promise.all([
     targetDb.chats.count(),

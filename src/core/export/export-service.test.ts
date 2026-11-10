@@ -51,7 +51,7 @@ describe('export-service', () => {
       chatId: 'c1',
       messageId: 'm3',
       type: 'url',
-      rawUrl: 'https://github.com/octonote/app',
+      rawUrl: 'https://github.com/mtnote/app',
       domain: 'github.com',
       displayLabel: 'GitHub link',
       context: 'Check repository',
@@ -65,7 +65,7 @@ describe('export-service', () => {
 
   it('exports summary to readable markdown with source citations', () => {
     const md = exportSummaryToMarkdown(mockSummary);
-    expect(md).toContain('# Octonote Summary: Team Standup');
+    expect(md).toContain('# MTNOTE Summary: Team Standup');
     expect(md).toContain('We agreed to ship beta on Friday.');
     expect(md).toContain('Line 3');
     expect(md).toContain('TODO: verify end-to-end tests');
@@ -75,8 +75,8 @@ describe('export-service', () => {
 
   it('exports resources to readable markdown', () => {
     const md = exportResourcesToMarkdown(mockResources);
-    expect(md).toContain('# Octonote: Knowledge Resources');
-    expect(md).toContain('https://github.com/octonote/app');
+    expect(md).toContain('# MTNOTE: Knowledge Resources');
+    expect(md).toContain('https://github.com/mtnote/app');
     expect(md).toContain('`github.com`');
     expect(md).toContain('Line 8');
   });
@@ -84,13 +84,13 @@ describe('export-service', () => {
   it('exports summary to self-contained HTML document with style and disclaimer', () => {
     const html = exportSummaryToHtml(mockSummary);
     expect(html).toContain('<!DOCTYPE html>');
-    expect(html).toContain('Octonote Summary: Team Standup');
+    expect(html).toContain('MTNOTE Summary: Team Standup');
     expect(html).toContain('We agreed to ship beta on Friday.');
     expect(html).toContain('Deterministic extractive summary disclaimer');
   });
 
   it('generates a valid binary PDF Blob', async () => {
-    const pdfBlob = generatePdfBlob('Octonote Summary: Team Standup', [
+    const pdfBlob = generatePdfBlob('MTNOTE Summary: Team Standup', [
       { heading: 'Decisions', lines: ['- We agreed to ship beta on Friday. (Line 3)'] },
       { heading: 'Action Items', lines: ['- TODO: verify tests (Line 5)'] },
     ]);

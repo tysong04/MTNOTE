@@ -1,7 +1,14 @@
 import { UserProfile, UserPreferences } from './types';
 
-const PROFILE_STORAGE_KEY = 'octonote_user_profile';
-const SESSION_STORAGE_KEY = 'octonote_active_session';
+export const PRIMARY_PROFILE_KEY = 'mtnote_user_profile';
+export const LEGACY_PROFILE_KEY = 'octonote_user_profile';
+
+export const PRIMARY_SESSION_KEY = 'mtnote_active_session';
+export const LEGACY_SESSION_KEY = 'octonote_active_session';
+
+// Aliases for compatibility
+export const PROFILE_STORAGE_KEY = PRIMARY_PROFILE_KEY;
+export const SESSION_STORAGE_KEY = PRIMARY_SESSION_KEY;
 
 export const DEFAULT_PREFERENCES: UserPreferences = {
   compactView: false,
@@ -13,7 +20,7 @@ export const DEFAULT_PREFERENCES: UserPreferences = {
  * Extracts 1-2 uppercase letters for user avatar
  */
 export function getInitials(name: string): string {
-  if (!name || !name.trim()) return 'O';
+  if (!name || !name.trim()) return 'M';
   const parts = name.trim().split(/\s+/);
   if (parts.length === 1) {
     return parts[0].slice(0, 2).toUpperCase();
@@ -23,10 +30,19 @@ export function getInitials(name: string): string {
 
 /**
  * Retrieves the persisted local profile from browser localStorage.
+ * Automatically migrates existing legacy data to preserve user setup across the rebrand.
  */
 export function getLocalProfile(): UserProfile | null {
   try {
-    const raw = localStorage.getItem(PROFILE_STORAGE_KEY);
+    let raw = localStorage.getItem(PRIMARY_PROFILE_KEY);
+    if (!raw) {
+      raw = localStorage.getItem(LEGACY_PROFILE_KEY);
+      if (raw) {
+        try {
+          localStorage.setItem(PRIMARY_PROFILE_KEY, raw);
+        } catch {}
+      }
+    }
     if (!raw) return null;
     const parsed = JSON.parse(raw);
     if (!parsed || typeof parsed !== 'object' || !parsed.displayName) {
@@ -52,9 +68,9 @@ export function getLocalProfile(): UserProfile | null {
 export function saveLocalProfile(updates: Partial<UserProfile>): UserProfile {
   const existing = getLocalProfile() || {
     id: `user_${Date.now()}`,
-    displayName: 'Octonote User',
-    email: 'user@octonote.local',
-    avatarInitial: 'OU',
+    displayName: 'MTNOTE User',
+    email: 'user@mtnote.local',
+    avatarInitial: 'MU',
     createdAt: new Date().toISOString(),
     lastActiveAt: new Date().toISOString(),
     preferences: DEFAULT_PREFERENCES,
@@ -74,7 +90,7 @@ export function saveLocalProfile(updates: Partial<UserProfile>): UserProfile {
   };
 
   try {
-    localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(updated));
+    localStorage.setItem(PRIMARY_PROFILE_KEY, JSON.stringify(updated));
   } catch (err) {
     console.error('Failed to save profile to localStorage:', err);
   }
@@ -118,7 +134,7 @@ export function registerLocalProfile(
   };
 
   try {
-    localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(newProfile));
+    localStorage.setItem(PRIMARY_PROFILE_KEY, JSON.stringify(newProfile));
     setSessionActive(true);
     return { success: true, profile: newProfile };
   } catch (err) {
@@ -167,8 +183,15 @@ export function loginLocalProfile(
  */
 export function isSessionActive(): boolean {
   try {
-    const active = localStorage.getItem(SESSION_STORAGE_KEY);
-    // If user has a profile and session is active or not explicitly locked
+    let active = localStorage.getItem(PRIMARY_SESSION_KEY);
+    if (active === null) {
+      active = localStorage.getItem(LEGACY_SESSION_KEY);
+      if (active !== null) {
+        try {
+          localStorage.setItem(PRIMARY_SESSION_KEY, active);
+        } catch {}
+      }
+    }
     return active === 'true';
   } catch {
     return false;
@@ -180,11 +203,8 @@ export function isSessionActive(): boolean {
  */
 export function setSessionActive(active: boolean): void {
   try {
-    if (active) {
-      localStorage.setItem(SESSION_STORAGE_KEY, 'true');
-    } else {
-      localStorage.setItem(SESSION_STORAGE_KEY, 'false');
-    }
+    const val = active ? 'true' : 'false';
+    localStorage.setItem(PRIMARY_SESSION_KEY, val);
   } catch (err) {
     console.error('Failed to update session state:', err);
   }
@@ -203,8 +223,10 @@ export function signOutLocalSession(): void {
  */
 export function resetLocalProfile(): void {
   try {
-    localStorage.removeItem(PROFILE_STORAGE_KEY);
-    localStorage.removeItem(SESSION_STORAGE_KEY);
+    localStorage.removeItem(PRIMARY_PROFILE_KEY);
+    localStorage.removeItem(LEGACY_PROFILE_KEY);
+    localStorage.removeItem(PRIMARY_SESSION_KEY);
+    localStorage.removeItem(LEGACY_SESSION_KEY);
   } catch (err) {
     console.error('Failed to reset profile:', err);
   }

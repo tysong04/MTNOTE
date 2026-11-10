@@ -78,12 +78,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className="flex items-center justify-between h-16 px-4 border-b border-slate-100">
           <div className="flex items-center gap-3 overflow-hidden">
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-indigo-600 text-white font-bold shadow-sm shadow-indigo-200">
-              <span className="text-lg">O</span>
+              <span className="text-lg">M</span>
             </div>
             {!isCollapsed && (
               <div className="flex flex-col min-w-0">
                 <span className="text-base font-semibold tracking-tight text-slate-900 truncate">
-                  Octonote
+                  MTNOTE
                 </span>
                 <span className="text-xs text-slate-500 font-medium truncate">
                   Knowledge Base

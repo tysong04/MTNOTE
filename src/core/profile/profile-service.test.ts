@@ -19,7 +19,7 @@ describe('profile-service', () => {
     expect(getInitials('Alice')).toBe('AL');
     expect(getInitials('Alice Walker')).toBe('AW');
     expect(getInitials('John Fitzgerald Kennedy')).toBe('JK');
-    expect(getInitials('')).toBe('O');
+    expect(getInitials('')).toBe('M');
   });
 
   it('returns null when no local profile is stored', () => {

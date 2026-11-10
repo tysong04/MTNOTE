@@ -57,14 +57,14 @@ export const SettingsView: React.FC = () => {
           <h3 className="text-base font-semibold text-slate-900">Privacy &amp; Data Control</h3>
         </div>
         <p className="text-xs text-slate-600 leading-relaxed">
-          Octonote operates strictly on a <strong>local-first</strong> security model. WhatsApp conversations are parsed client-side in memory and stored locally in browser IndexedDB.
+          MTNOTE operates strictly on a <strong>local-first</strong> security model. WhatsApp conversations are parsed client-side in memory and stored locally in browser IndexedDB.
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
           <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
             <span className="text-xs font-semibold text-slate-800">Remote Egress: Zero</span>
             <p className="text-[11px] text-slate-500">
-              No chat logs, extracted URLs, or messages are ever transmitted to Octonote servers.
+              No chat logs, extracted URLs, or messages are ever transmitted to MTNOTE servers.
             </p>
           </div>
           <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
