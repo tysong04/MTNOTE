@@ -101,8 +101,8 @@ Before running MTNOTE, make sure you have:
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/tysong04/octonote.git
-cd octonote
+git clone https://github.com/tysong04/MTNOTE.git
+cd MTNOTE
 ```
 
 ### 2. Install dependencies
